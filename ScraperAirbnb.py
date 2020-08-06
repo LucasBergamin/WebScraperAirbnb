@@ -5,6 +5,9 @@ import requests
 lugares = []
 valores = []
 num = 0
+convertendo = ""
+convertendo1 = 0
+desc = ""
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) '
@@ -16,16 +19,28 @@ for item in soup.select('[itemprop=itemListElement]'):
     try:
         print('----------------------------------------')
         print(item.select('a')[0]['aria-label'])
+        descricao = item.select('a')[0]['aria-label']
+
         lugares.insert(num, item.select('a')[0]['aria-label'])
         print(item.select('._1p7iugi')[0].get_text())
-        valores.insert(num, item.select('._1p7iugi')[0].get_text())
+        valor = item.select('._1p7iugi')[0].get_text()
+        for n in valor:
+            try:
+                int(n)
+                convertendo += n
+            except:
+                continue
+        convertendo1 = int(convertendo)
+        valores.insert(num, convertendo1)
+        convertendo1 = 0
+        convertendo = ""
         num = num + 1
-        print('----------------------------------------')
+
     except Exception as e:
         # raise e
         print('')
 
-print(valores)
 matplotlib.pyplot.plot(lugares, valores)
 matplotlib.pyplot.title('Tabela variação de valores - Ilhabela')
 matplotlib.pyplot.show()
+
